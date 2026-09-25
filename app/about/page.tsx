@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   },
   description:
     "Learn about ToolNest, India's directory for top businesses and tools. Our mission, how it works, and how to get listed.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

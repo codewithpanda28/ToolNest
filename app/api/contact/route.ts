@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/validations/contact";
+import { createContactMessage } from "@/lib/db/contact";
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -21,16 +22,17 @@ export async function POST(request: Request) {
     );
   }
 
-  await new Promise((resolve) => setTimeout(resolve, 300));
-
-  console.log("[api/contact] received:", {
-    name: parsed.data.name,
-    email: parsed.data.email,
-    subject: parsed.data.subject,
-  });
-
-  return NextResponse.json(
-    { success: true, message: "Message sent" },
-    { status: 200 }
-  );
+  try {
+    await createContactMessage(parsed.data);
+    return NextResponse.json(
+      { success: true, message: "Message sent" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("[api/contact] db error:", error);
+    return NextResponse.json(
+      { success: false, message: "Something went wrong. Please try again." },
+      { status: 500 }
+    );
+  }
 }

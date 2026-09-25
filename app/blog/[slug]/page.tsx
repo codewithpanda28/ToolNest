@@ -2,8 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SectionHeader } from "@/components/shared/SectionHeader";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { AdSlot } from "@/components/ads/AdSlot";
 import { BlogCard, formatDate } from "@/components/blog/BlogCard";
 import { renderContent } from "@/lib/renderContent";
+import {
+  articleSchema,
+  breadcrumbSchema,
+} from "@/lib/seo/structured-data";
 import {
   allPosts,
   getPostBySlug,
@@ -23,6 +29,7 @@ export async function generateMetadata({
   return {
     title: { absolute: `${post.title} — ToolNest Blog` },
     description: post.excerpt,
+    alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       title: post.title,
       description: post.excerpt,
@@ -42,8 +49,15 @@ export default async function BlogDetailPage({
 
   const related = getRelatedPosts(post.slug, 3);
 
+  const breadcrumbData = breadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Blog", url: "/blog" },
+    { name: post.title, url: `/blog/${post.slug}` },
+  ]);
+
   return (
     <>
+      <JsonLd data={[articleSchema(post), breadcrumbData]} />
       <nav className="bg-white py-4">
         <div className="mx-auto max-w-6xl px-4 text-sm text-gray-500">
           <Link href="/" className="transition-colors hover:text-gray-900">
@@ -80,7 +94,12 @@ export default async function BlogDetailPage({
               {post.coverEmoji}
             </span>
           </div>
+          <AdSlot slot="article-top" className="mb-8" />
           <article>{renderContent(post.content)}</article>
+
+          <div className="mt-8">
+            <AdSlot slot="article-bottom" className="my-8" />
+          </div>
 
           <div className="mt-8 flex flex-wrap gap-2">
             {post.tags.map((tag) => (

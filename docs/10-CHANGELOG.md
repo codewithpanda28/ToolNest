@@ -2,6 +2,66 @@
 
 > Log every change. Newest at top.
 
+## 2025-09-25 — Step 14: AdSense prep + deploy config
+- `public/ads.txt` (placeholder pub id) + `public/google-site-verification.html` (placeholder)
+- `components/ads/AdSenseScript.tsx` (env-gated) + `components/ads/AdSlot.tsx` (placeholder when env empty, real ins when set)
+- Ad slots added: home-top, businesses-top, tools-top, blog-list, article-top + article-bottom
+- `vercel.json` (bom1, build = prisma generate && next build) + `.env.production.example`
+- package.json scripts: postinstall, build (prisma generate), db:migrate:deploy, db:seed, db:studio
+- `next.config.ts`: security headers (nosniff/SAMEORIGIN/referrer/permissions-policy), remotePatterns, poweredByHeader false
+- sitemap.ts + robots.ts use NEXT_PUBLIC_SITE_URL; README.md rewritten; docs/DEPLOY.md added
+- Verified: tsc clean, build pass, /ads.txt 200 text/plain, ad placeholders render on all routes (dev, no env), AdSense script NOT loaded (correct), security headers present, no console errors
+
+## 2025-09-25 — Step 13: SEO polish
+- `lib/seo/structured-data.ts` + `components/seo/JsonLd.tsx`
+- JSON-LD applied: layout (Organization + WebSite), blog detail (BlogPosting + Breadcrumb), business detail (LocalBusiness + Breadcrumb), tool detail (SoftwareApplication + Breadcrumb), FAQ (FAQPage)
+- OG images via next/og ImageResponse: base opengraph + twitter, dynamic blog/business/tool opengraph-image
+- `app/icon.tsx`, `app/manifest.ts` (PWA), generated public/icon-192.png, icon-512.png, apple-icon.png
+- Metadata: keywords, robots/googleBot, alternates.canonical on all public pages, icons, manifest, verification placeholder
+- a11y: skip-to-content link + #main-content
+- Fixed: Satori OG errors (multi-child divs need explicit display; adjacent text children → single string). Verified all OG routes 200 image/png
+- Verified: tsc clean, build pass (65 pages), JSON-LD present on all key routes, manifest valid, canonical present
+
+## 2025-09-25 — Step 12: Added 10 blog articles (15 total)
+- New posts: CRM tools, freelancing start guide (featured), PM tools, WhatsApp automation (featured), payment gateway comparison, SaaS selection, freelance rates, email marketing, AI tools for creators (featured), digital marketing guide
+- `content/blog/index.ts` imports all 15 posts; featured now 5
+- Verified: tsc clean, build pass (61 pages), /blog shows 15 posts, all categories have 2+ posts, article word counts 2400-2900 visible text, sitemap has 15 blog URLs, new detail pages 200, no console errors
+
+## 2025-09-25 — Step 11: Admin panel + submissions/contacts management
+- `scripts/make-admin.ts` + `npm run make-admin` (switched scripts to tsx — ts-node compiler-options JSON broke under npm run)
+- `lib/auth/requireAdmin.ts`; middleware authorized() now protects /admin too
+- `lib/db/submissions.ts` marked "use server": added getAllSubmissions, getSubmissionById, approveSubmission (creates live listing, slug dedup), rejectSubmission (notes=reason)
+- `lib/db/contact.ts`: getAllContactMessages, getContactMessageById
+- Admin pages: layout (sidebar), dashboard (stats + recent), submissions list (status/type filter pills), submission detail (Approve/Reject via server actions + shadcn dialog), contacts list + detail
+- `components/admin/StatusBadge.tsx` + `SubmissionActions.tsx`; UserMenu shows Admin link for admins
+- Verified: tsc clean, build pass, admin /admin 200 / unauth 307→login / non-admin 307→dashboard, approve flow created live Business "Approval Test Co" visible on /businesses, no console errors
+
+## 2025-09-25 — Step 10: Auth (NextAuth v5 + Prisma)
+- Prisma: added User model + userId relations on Submission/Payment; migration `add_user_auth` applied
+- Installed next-auth@5.0.0-beta.32, @auth/prisma-adapter, bcryptjs (3.x); added @types/bcryptjs
+- `lib/auth/`: auth.config.ts (JWT, protected /dashboard, id+role in token/session), auth.ts (Credentials + bcrypt)
+- `types/next-auth.d.ts`: session user id + role augmentation
+- `app/api/auth/[...nextauth]/route.ts` (node runtime) + `app/api/auth/signup/route.ts` + `lib/validations/auth.ts`
+- `middleware.ts` (NextAuth auth wrapper, matcher excludes api/static/assets)
+- `components/auth/`: SessionProvider, LoginForm, SignupForm, UserMenu (shadcn dropdown-menu), SignOutButton
+- `app/login`, `app/signup`, `app/dashboard` pages; Header now uses UserMenu; layout wrapped in SessionProvider
+- `lib/db/users.ts` (getUserById) + submissions.getSubmissionsByUser
+- Env: AUTH_SECRET (generated) + NEXTAUTH_URL added to .env/.env.local/.env.example
+- Fixed build P1001 by adding `connect_timeout=15` to DATABASE_URL
+- Verified: tsc clean, build pass, signup 200 / duplicate 409, login 302 + session cookie, /dashboard 200 authed + 307 unauth, wrong password → CredentialsSignin, bcrypt hash confirmed (not plaintext), header user menu renders, no console errors
+
+## 2025-09-25 — Step 9: Prisma full setup + DB-backed pages
+- Installed prisma@6.19.3 + @prisma/client@6.19.3 (pinned, Node 20 compat) + ts-node + dotenv
+- `prisma init` created prisma.config.ts (dotenv); wrote real DATABASE_URL to `.env` (Prisma reads .env, not .env.local)
+- `prisma/schema.prisma`: Business, Tool, Submission, ContactMessage, Payment models + indexes
+- Migration `init` applied to Railway Postgres; `prisma generate` done
+- `prisma/seed.ts`: 10 businesses + 10 tools (inline data); seeded successfully
+- `lib/db/`: prisma singleton, businesses, tools, submissions, contact, leaderboard mappers
+- Pages now async + ISR revalidate=60, fetch from DB (/, /businesses, /tools, detail pages, sitemap)
+- API routes /api/submit + /api/contact write to DB (Submission + ContactMessage)
+- Deleted `lib/mock-data.ts` (no imports remained); created `.env.example`
+- Verified: tsc clean, build pass (ISR 1m), all routes 200, forms create DB rows (Submission + ContactMessage verified then cleaned), no console errors
+
 ## 2025-09-25 — Step 8: Blog system + 5 articles + SEO infrastructure
 - `types/index.ts`: added BlogCategory, BlogPost
 - `content/blog/`: 5 original articles (invoice tools, automation tools, listing guide, SEO tools, GST guide) 800-2000 words each + index.ts helpers

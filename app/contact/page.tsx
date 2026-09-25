@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   },
   description:
     "Reach out to ToolNest for support, business inquiries, or feedback. Email: support@toolnest.in",
+  alternates: { canonical: "/contact" },
 };
 
 const CONTACT_INFO = [

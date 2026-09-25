@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHeader } from "@/components/shared/SectionHeader";
+import { AdSlot } from "@/components/ads/AdSlot";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { BlogFilters } from "@/components/blog/BlogFilters";
 import { allPosts, getFeaturedPosts } from "@/content/blog";
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
   },
   description:
     "Guides, tutorials, and tool reviews for Indian freelancers and small businesses. Learn about invoicing, GST, automation, and SEO.",
+  alternates: { canonical: "/blog" },
 };
 
 export default function BlogPage() {
@@ -44,6 +46,10 @@ export default function BlogPage() {
           </div>
         </section>
       )}
+
+      <div className="mx-auto max-w-6xl px-4">
+        <AdSlot slot="blog-list" format="auto" className="my-8" />
+      </div>
 
       <section className="bg-gray-50 py-12">
         <div className="mx-auto max-w-6xl px-4">

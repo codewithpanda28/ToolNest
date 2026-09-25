@@ -6,7 +6,11 @@ import { BusinessDirectory } from "@/components/businesses/BusinessDirectory";
 import { LeaderboardTable } from "@/components/shared/LeaderboardTable";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { Input } from "@/components/ui/input";
-import { mockBusinesses, toBusinessLeaderboard } from "@/lib/mock-data";
+import { AdSlot } from "@/components/ads/AdSlot";
+import { getBusinesses } from "@/lib/db/businesses";
+import { toBusinessLeaderboard } from "@/lib/db/leaderboard";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: {
@@ -14,11 +18,13 @@ export const metadata: Metadata = {
   },
   description:
     "Discover and rank top businesses across India. Weekly leaderboard resets every Monday.",
+  alternates: { canonical: "/businesses" },
 };
 
-export default function BusinessesPage() {
-  const leaderboard = toBusinessLeaderboard(mockBusinesses);
-  const driftItems = mockBusinesses.map((business) => ({
+export default async function BusinessesPage() {
+  const businesses = await getBusinesses();
+  const leaderboard = toBusinessLeaderboard(businesses);
+  const driftItems = businesses.map((business) => ({
     image: `https://picsum.photos/seed/${business.slug}/600/400`,
     title: business.name,
     href: `/business/${business.slug}`,
@@ -48,6 +54,10 @@ export default function BusinessesPage() {
           </div>
         </div>
       </section>
+
+      <div className="mx-auto max-w-6xl px-4">
+        <AdSlot slot="businesses-top" format="auto" className="my-8" />
+      </div>
 
       <section className="relative h-[420px] overflow-hidden bg-slate-950 md:h-[520px]">
         <DriftWall
@@ -111,7 +121,7 @@ export default function BusinessesPage() {
 
       <section className="bg-gray-50 py-16">
         <div className="mx-auto max-w-6xl px-4">
-          <BusinessDirectory businesses={mockBusinesses} />
+          <BusinessDirectory businesses={businesses} />
         </div>
       </section>
 

@@ -6,7 +6,11 @@ import { ToolsDirectory } from "@/components/tools/ToolsDirectory";
 import { LeaderboardTable } from "@/components/shared/LeaderboardTable";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { Input } from "@/components/ui/input";
-import { getTopTools, mockTools, toToolLeaderboard } from "@/lib/mock-data";
+import { AdSlot } from "@/components/ads/AdSlot";
+import { getTools, getTopTools } from "@/lib/db/tools";
+import { toToolLeaderboard } from "@/lib/db/leaderboard";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: {
@@ -14,11 +18,13 @@ export const metadata: Metadata = {
   },
   description:
     "Discover the best tools for freelancers and businesses in India. Weekly leaderboard, reviews, and rankings.",
+  alternates: { canonical: "/tools" },
 };
 
-export default function ToolsPage() {
-  const leaderboard = toToolLeaderboard(getTopTools(10));
-  const domeImages = mockTools.map((tool) => ({
+export default async function ToolsPage() {
+  const tools = await getTools();
+  const leaderboard = toToolLeaderboard(await getTopTools(10));
+  const domeImages = tools.map((tool) => ({
     src: `https://picsum.photos/seed/${tool.slug}/600/600`,
     alt: tool.name,
   }));
@@ -47,6 +53,10 @@ export default function ToolsPage() {
           </div>
         </div>
       </section>
+
+      <div className="mx-auto max-w-6xl px-4">
+        <AdSlot slot="tools-top" format="auto" className="my-8" />
+      </div>
 
       <section className="relative h-[500px] bg-[#120F17] md:h-[640px]">
         <DomeGallery
@@ -94,7 +104,7 @@ export default function ToolsPage() {
 
       <section className="bg-gray-50 py-16">
         <div className="mx-auto max-w-6xl px-4">
-          <ToolsDirectory tools={mockTools} />
+          <ToolsDirectory tools={tools} />
         </div>
       </section>
 

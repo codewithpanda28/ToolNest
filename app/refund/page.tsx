@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   },
   description:
     "Understand ToolNest's refund policy for paid listings, featured placements, and leaderboard bids.",
+  alternates: { canonical: "/refund" },
 };
 
 export default function RefundPage() {

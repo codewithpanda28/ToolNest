@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   },
   description:
     "List your business or tool on ToolNest. Free listing available. Featured slots starting ₹499/week.",
+  alternates: { canonical: "/submit" },
 };
 
 export default function SubmitPage() {

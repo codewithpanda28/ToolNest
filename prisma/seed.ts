@@ -1,10 +1,11 @@
-import type { Business, LeaderboardItem, Tool } from "@/types";
+import { PrismaClient } from "@prisma/client";
 
-export const mockBusinesses: Business[] = [
+const prisma = new PrismaClient();
+
+const businessSeeds = [
   {
-    id: "b1",
-    name: "TechCorp Solutions",
     slug: "techcorp-solutions",
+    name: "TechCorp Solutions",
     logo: "🏢",
     category: "SaaS",
     description: "Enterprise software solutions.",
@@ -12,9 +13,8 @@ export const mockBusinesses: Business[] = [
     amount: 5000,
   },
   {
-    id: "b2",
-    name: "DesignHub Studio",
     slug: "designhub-studio",
+    name: "DesignHub Studio",
     logo: "🎨",
     category: "Design",
     description: "Creative design studio.",
@@ -22,9 +22,8 @@ export const mockBusinesses: Business[] = [
     amount: 3200,
   },
   {
-    id: "b3",
-    name: "CodeCraft Labs",
     slug: "codecraft-labs",
+    name: "CodeCraft Labs",
     logo: "💻",
     category: "Dev Agency",
     description: "Custom software development.",
@@ -32,9 +31,8 @@ export const mockBusinesses: Business[] = [
     amount: 2100,
   },
   {
-    id: "b4",
-    name: "PixelWorks India",
     slug: "pixelworks-india",
+    name: "PixelWorks India",
     logo: "🖼️",
     category: "Design",
     description: "Branding and illustrations.",
@@ -42,9 +40,8 @@ export const mockBusinesses: Business[] = [
     amount: 1500,
   },
   {
-    id: "b5",
-    name: "DataMinds Analytics",
     slug: "dataminds-analytics",
+    name: "DataMinds Analytics",
     logo: "📊",
     category: "Data",
     description: "Data analytics consulting.",
@@ -52,9 +49,8 @@ export const mockBusinesses: Business[] = [
     amount: 1200,
   },
   {
-    id: "b6",
-    name: "CloudNine Hosting",
     slug: "cloudnine-hosting",
+    name: "CloudNine Hosting",
     logo: "☁️",
     category: "Hosting",
     description: "Reliable cloud hosting.",
@@ -62,9 +58,8 @@ export const mockBusinesses: Business[] = [
     amount: 1000,
   },
   {
-    id: "b7",
-    name: "SwiftShip Logistics",
     slug: "swiftship-logistics",
+    name: "SwiftShip Logistics",
     logo: "🚚",
     category: "Logistics",
     description: "Fast delivery services.",
@@ -72,9 +67,8 @@ export const mockBusinesses: Business[] = [
     amount: 800,
   },
   {
-    id: "b8",
-    name: "GreenLeaf Organics",
     slug: "greenleaf-organics",
+    name: "GreenLeaf Organics",
     logo: "🌿",
     category: "E-commerce",
     description: "Organic products store.",
@@ -82,9 +76,8 @@ export const mockBusinesses: Business[] = [
     amount: 600,
   },
   {
-    id: "b9",
-    name: "FinEdge Capital",
     slug: "finedge-capital",
+    name: "FinEdge Capital",
     logo: "💰",
     category: "Fintech",
     description: "Investment advisory.",
@@ -92,9 +85,8 @@ export const mockBusinesses: Business[] = [
     amount: 500,
   },
   {
-    id: "b10",
-    name: "BrightByte Media",
     slug: "brightbyte-media",
+    name: "BrightByte Media",
     logo: "📣",
     category: "Marketing",
     description: "Digital marketing agency.",
@@ -103,11 +95,10 @@ export const mockBusinesses: Business[] = [
   },
 ];
 
-export const mockTools: Tool[] = [
+const toolSeeds = [
   {
-    id: "t1",
-    name: "InvoicePro",
     slug: "invoicepro",
+    name: "InvoicePro",
     logo: "🧾",
     category: "Invoicing",
     description: "Generate invoices in seconds.",
@@ -116,9 +107,8 @@ export const mockTools: Tool[] = [
     pricing: "paid",
   },
   {
-    id: "t2",
-    name: "SEOSpy",
     slug: "seospy",
+    name: "SEOSpy",
     logo: "🔍",
     category: "SEO",
     description: "Track and improve rankings.",
@@ -127,9 +117,8 @@ export const mockTools: Tool[] = [
     pricing: "freemium",
   },
   {
-    id: "t3",
-    name: "ClipMaster",
     slug: "clipmaster",
+    name: "ClipMaster",
     logo: "🎬",
     category: "Video",
     description: "Edit and export videos fast.",
@@ -138,9 +127,8 @@ export const mockTools: Tool[] = [
     pricing: "paid",
   },
   {
-    id: "t4",
-    name: "MailBlast",
     slug: "mailblast",
+    name: "MailBlast",
     logo: "📧",
     category: "Email",
     description: "Email campaigns made simple.",
@@ -149,9 +137,8 @@ export const mockTools: Tool[] = [
     pricing: "freemium",
   },
   {
-    id: "t5",
-    name: "TaskFlow",
     slug: "taskflow",
+    name: "TaskFlow",
     logo: "✅",
     category: "Project mgmt",
     description: "Organize projects and tasks.",
@@ -160,9 +147,8 @@ export const mockTools: Tool[] = [
     pricing: "freemium",
   },
   {
-    id: "t6",
-    name: "ImageCompress Pro",
     slug: "imagecompress-pro",
+    name: "ImageCompress Pro",
     logo: "🗜️",
     category: "Utility",
     description: "Compress images without losing quality.",
@@ -171,9 +157,8 @@ export const mockTools: Tool[] = [
     pricing: "free",
   },
   {
-    id: "t7",
-    name: "PDF Wizard",
     slug: "pdf-wizard",
+    name: "PDF Wizard",
     logo: "📄",
     category: "Utility",
     description: "Merge, split and edit PDFs.",
@@ -182,9 +167,8 @@ export const mockTools: Tool[] = [
     pricing: "freemium",
   },
   {
-    id: "t8",
-    name: "LeadHunter",
     slug: "leadhunter",
+    name: "LeadHunter",
     logo: "🎯",
     category: "Sales",
     description: "Find and qualify leads.",
@@ -193,9 +177,8 @@ export const mockTools: Tool[] = [
     pricing: "paid",
   },
   {
-    id: "t9",
-    name: "ContentAI",
     slug: "contentai",
+    name: "ContentAI",
     logo: "✍️",
     category: "Writing",
     description: "AI-powered content writer.",
@@ -204,9 +187,8 @@ export const mockTools: Tool[] = [
     pricing: "paid",
   },
   {
-    id: "t10",
-    name: "BackupNinja",
     slug: "backupninja",
+    name: "BackupNinja",
     logo: "🥷",
     category: "Utility",
     description: "Automatic data backups.",
@@ -216,58 +198,24 @@ export const mockTools: Tool[] = [
   },
 ];
 
-export function getTopBusinesses(limit = 5): Business[] {
-  return mockBusinesses.slice(0, limit);
+async function main() {
+  await prisma.submission.deleteMany();
+  await prisma.contactMessage.deleteMany();
+  await prisma.payment.deleteMany();
+  await prisma.tool.deleteMany();
+  await prisma.business.deleteMany();
+
+  const businesses = await prisma.business.createMany({ data: businessSeeds });
+  const tools = await prisma.tool.createMany({ data: toolSeeds });
+
+  console.log(`Seeded ${businesses.count} businesses, ${tools.count} tools`);
 }
 
-export function getTopTools(limit = 5): Tool[] {
-  return mockTools.slice(0, limit);
-}
-
-export function toBusinessLeaderboard(
-  businesses: Business[]
-): LeaderboardItem[] {
-  return businesses.map((business, index) => ({
-    rank: index + 1,
-    id: business.id,
-    name: business.name,
-    slug: business.slug,
-    logo: business.logo,
-    category: business.category,
-    amount: business.amount,
-    type: "business",
-    website: business.website,
-  }));
-}
-
-export function toToolLeaderboard(tools: Tool[]): LeaderboardItem[] {
-  return tools.map((tool, index) => ({
-    rank: index + 1,
-    id: tool.id,
-    name: tool.name,
-    slug: tool.slug,
-    logo: tool.logo,
-    category: tool.category,
-    amount: tool.amount,
-    type: "tool",
-    website: tool.website,
-  }));
-}
-
-export function getBusinessBySlug(slug: string): Business | undefined {
-  return mockBusinesses.find((b) => b.slug === slug);
-}
-
-export function getToolBySlug(slug: string): Tool | undefined {
-  return mockTools.find((t) => t.slug === slug);
-}
-
-export function getBusinessRank(business: Business): number {
-  const sorted = [...mockBusinesses].sort((a, b) => b.amount - a.amount);
-  return sorted.findIndex((b) => b.id === business.id) + 1;
-}
-
-export function getToolRank(tool: Tool): number {
-  const sorted = [...mockTools].sort((a, b) => b.amount - a.amount);
-  return sorted.findIndex((t) => t.id === tool.id) + 1;
-}
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { LegalLayout } from "@/components/legal/LegalLayout";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { faqSchema } from "@/lib/seo/structured-data";
 import {
   Accordion,
   AccordionContent,
@@ -13,6 +15,7 @@ export const metadata: Metadata = {
   },
   description:
     "Frequently asked questions about ToolNest, including listings, leaderboards, payments, and accounts.",
+  alternates: { canonical: "/faq" },
 };
 
 const FAQ_GROUPS = [
@@ -82,12 +85,19 @@ const FAQ_GROUPS = [
 ];
 
 export default function FAQPage() {
+  const faqs = FAQ_GROUPS.flatMap((group) => group.items).map((item) => ({
+    question: item.q,
+    answer: item.a,
+  }));
+
   return (
-    <LegalLayout
-      title="Frequently Asked Questions"
-      badge="Support"
-      subtitle="Answers to the questions we hear most often."
-    >
+    <>
+      <JsonLd data={faqSchema(faqs)} />
+      <LegalLayout
+        title="Frequently Asked Questions"
+        badge="Support"
+        subtitle="Answers to the questions we hear most often."
+      >
       {FAQ_GROUPS.map((group) => (
         <section key={group.title} className="mb-8">
           <h2 className="mb-3 mt-6 text-xl font-bold text-gray-900 md:text-2xl">
@@ -107,6 +117,7 @@ export default function FAQPage() {
           </Accordion>
         </section>
       ))}
-    </LegalLayout>
+      </LegalLayout>
+    </>
   );
 }

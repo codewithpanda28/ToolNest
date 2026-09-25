@@ -23,18 +23,25 @@
 
 ## Phase 3 — Detail + Submit
 - [x] Step 6: Submit form
-  - [ ] Wire real database (Step 8)
+  - [x] Wire real database (Step 9 — Submission model)
   - [ ] Email notification on submission
   - [ ] Admin approval flow
 
 ## Phase 4 — Database
-- [ ] Step 8: Database setup (Railway)
+- [x] Step 9: Database setup (Railway Postgres + Prisma v6)
+  - [ ] Backup strategy for DB (e.g. Railway scheduled backups)
 
 ## Phase 5 — Auth
-- [ ] Step 9: Auth (login/signup)
+- [x] Step 10: Auth (NextAuth v5 — login/signup/dashboard/middleware)
+  - [ ] Add OAuth (Google login) for future
+  - [ ] Require auth on /submit (later)
+  - [ ] Password reset flow
 
-## Phase 6 — Payments + Leaderboard
-- [ ] Step 10: Razorpay + Leaderboard logic
+## Phase 6 — Admin (Payments deferred)
+- [x] Step 11: Admin panel (submissions + contacts)
+  - [ ] Admin: edit/delete listings
+  - [ ] Email notifications on approve/reject
+  - [ ] Admin: Businesses/Tools management pages (sidebar placeholders exist)
 
 ## Phase 7 — Legal
 - [x] Step 7: Legal pages (Privacy, Terms, Refund, About, Contact, FAQ, Disclaimer) — AdSense ready
@@ -44,10 +51,16 @@
 
 ## Phase 8 — Blog + SEO
 - [x] Step 8: Blog system + 5 SEO articles (invoice, automation, listing, SEO tools, GST)
-  - [ ] Write 10 more blog posts (target 15 total for AdSense)
-  - [ ] Get real domain, update sitemap/metadata
-  - [ ] Setup Google Search Console
-- [ ] Step 9: Sitemap + robots.txt + SEO
+- [x] Step 12: Blog expanded to 15 articles (AdSense threshold met)
+- [x] Step 13: SEO polish (JSON-LD, OG images, manifest, canonical, a11y)
+- [x] Step 14: AdSense prep + deploy config
+  - [ ] Deploy to Vercel (Step 15)
+  - [ ] Buy domain (toolnest.in or similar)
+  - [ ] Setup Google Search Console (drop verification file / set env)
+  - [ ] Apply to AdSense (then set NEXT_PUBLIC_ADSENSE_CLIENT + ads.txt pub id)
+  - [ ] Replace placeholder icons with real logo
+  - [ ] Add blog search functionality
+  - [ ] Add author pages (future)
 
 ## Phase 9 — AdSense
 - [ ] Step 13: AdSense apply

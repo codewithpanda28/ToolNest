@@ -3,8 +3,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExternalLink, Share2 } from "lucide-react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
+import { JsonLd } from "@/components/seo/JsonLd";
+import {
+  breadcrumbSchema,
+  softwareApplicationSchema,
+} from "@/lib/seo/structured-data";
 import { cn } from "@/lib/utils";
-import { getToolBySlug, getToolRank, mockTools } from "@/lib/mock-data";
+import { getToolBySlug, getToolRank, getTools } from "@/lib/db/tools";
+
+export const revalidate = 60;
 
 const PRICING_STYLES: Record<string, string> = {
   free: "bg-green-100 text-green-700",
@@ -18,19 +25,21 @@ const PRICING_LABELS: Record<string, string> = {
   paid: "Paid",
 };
 
-export function generateStaticParams() {
-  return mockTools.map((tool) => ({ slug: tool.slug }));
+export async function generateStaticParams() {
+  const tools = await getTools();
+  return tools.map((tool) => ({ slug: tool.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/tool/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const tool = getToolBySlug(slug);
+  const tool = await getToolBySlug(slug);
   if (!tool) return { title: { absolute: "Tool Not Found — ToolNest" } };
   return {
     title: { absolute: `${tool.name} — ToolNest` },
     description: tool.description,
+    alternates: { canonical: `/tool/${tool.slug}` },
   };
 }
 
@@ -38,14 +47,22 @@ export default async function ToolDetailPage({
   params,
 }: PageProps<"/tool/[slug]">) {
   const { slug } = await params;
-  const tool = getToolBySlug(slug);
+  const tool = await getToolBySlug(slug);
   if (!tool) notFound();
 
-  const rank = getToolRank(tool);
-  const others = mockTools.filter((t) => t.id !== tool.id).slice(0, 4);
+  const rank = await getToolRank(tool);
+  const allTools = await getTools();
+  const others = allTools.filter((t) => t.id !== tool.id).slice(0, 4);
+
+  const breadcrumbData = breadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Tools", url: "/tools" },
+    { name: tool.name, url: `/tool/${tool.slug}` },
+  ]);
 
   return (
     <>
+      <JsonLd data={[softwareApplicationSchema(tool), breadcrumbData]} />
       <nav className="bg-white py-4">
         <div className="mx-auto max-w-6xl px-4 text-sm text-gray-500">
           <Link href="/" className="transition-colors hover:text-gray-900">

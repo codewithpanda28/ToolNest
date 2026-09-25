@@ -1,16 +1,23 @@
 import Link from "next/link";
+import type { Business, Tool } from "@/types";
 import { LeaderboardTable } from "@/components/shared/LeaderboardTable";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import {
-  getTopBusinesses,
-  getTopTools,
   toBusinessLeaderboard,
   toToolLeaderboard,
-} from "@/lib/mock-data";
+} from "@/lib/db/leaderboard";
 
-export function LeaderboardPreview() {
-  const topBusinesses = toBusinessLeaderboard(getTopBusinesses(5));
-  const topTools = toToolLeaderboard(getTopTools(5));
+type LeaderboardPreviewProps = {
+  businesses: Business[];
+  tools: Tool[];
+};
+
+export function LeaderboardPreview({
+  businesses,
+  tools,
+}: LeaderboardPreviewProps) {
+  const topBusinesses = toBusinessLeaderboard(businesses);
+  const topTools = toToolLeaderboard(tools);
 
   return (
     <div className="space-y-16">

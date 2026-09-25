@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { submissionSchema } from "@/lib/validations/submission";
+import { createSubmission } from "@/lib/db/submissions";
 import type { SubmissionResponse } from "@/types";
 
 export async function POST(request: Request) {
@@ -23,13 +24,21 @@ export async function POST(request: Request) {
     );
   }
 
-  await new Promise((resolve) => setTimeout(resolve, 300));
-
-  const id = crypto.randomUUID();
-  console.log("[api/submit] received:", { id, type: parsed.data.type, name: parsed.data.name });
-
-  return NextResponse.json<SubmissionResponse>(
-    { success: true, message: "Submission received", id },
-    { status: 200 }
-  );
+  try {
+    const submission = await createSubmission(parsed.data);
+    return NextResponse.json<SubmissionResponse>(
+      {
+        success: true,
+        message: "Submission received",
+        id: submission.id,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("[api/submit] db error:", error);
+    return NextResponse.json<SubmissionResponse>(
+      { success: false, message: "Something went wrong. Please try again." },
+      { status: 500 }
+    );
+  }
 }

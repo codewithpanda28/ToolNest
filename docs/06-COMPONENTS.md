@@ -84,4 +84,37 @@
 - `content/blog/` — 5 articles as TS files + `index.ts` (allPosts sorted, getPostBySlug, getPostsByCategory, getFeaturedPosts, getRecentPosts, getRelatedPosts).
 - `app/sitemap.ts` + `app/robots.ts` — SEO infra (placeholder domain toolnest.in).
 
+## SEO
+- `components/seo/JsonLd.tsx` (server) — renders one `<script type="application/ld+json">` per data item.
+- `lib/seo/structured-data.ts` — organizationSchema, websiteSchema, breadcrumbSchema, articleSchema (BlogPosting), faqSchema, localBusinessSchema, softwareApplicationSchema.
+- OG images (next/og ImageResponse, 1200x630, indigo gradient, system font): `app/opengraph-image.tsx`, `app/twitter-image.tsx`, `app/blog/[slug]/opengraph-image.tsx`, `app/business/[slug]/opengraph-image.tsx`, `app/tool/[slug]/opengraph-image.tsx`.
+- Icons: `app/icon.tsx` (32px "T"), `public/icon-192.png`, `public/icon-512.png`, `public/apple-icon.png` (generated placeholders — replace with real logo).
+- `app/manifest.ts` — PWA manifest (name, theme #4f46e5, 192/512 icons).
+- Applied on: layout (org + website + skip link), blog/business/tool detail (article/localBusiness/softwareApplication + breadcrumb), FAQ (FAQPage), canonical URLs on all public pages.
+
+## Ads
+- `components/ads/AdSenseScript.tsx` (client) — loads AdSense script only when NEXT_PUBLIC_ADSENSE_CLIENT set (afterInteractive).
+- `components/ads/AdSlot.tsx` (client) — renders placeholder ("Ad slot · {slot}") when env empty; real `<ins class="adsbygoogle">` + adsbygoogle.push when set.
+- `public/ads.txt` — placeholder publisher ID (replace after approval).
+- Slots: home-top, businesses-top, tools-top, blog-list, article-top, article-bottom.
+
+## Auth
+- `components/auth/SessionProvider.tsx` (client) — wraps app layout with next-auth/react SessionProvider.
+- `components/auth/LoginForm.tsx` (client) — RHF + zod, signIn('credentials', redirect:false), error banner, → /dashboard.
+- `components/auth/SignupForm.tsx` (client) — POST /api/auth/signup, → /login?signup=success.
+- `components/auth/UserMenu.tsx` (client) — useSession; unauthed → Login ghost button; authed → avatar dropdown (Dashboard, Submit, Sign out) via shadcn dropdown-menu (Base UI render prop).
+- `components/auth/SignOutButton.tsx` (client) — signOut() → /.
+- `lib/auth/auth.config.ts` — NextAuthConfig: JWT strategy, pages, authorized() protects /dashboard, jwt/session callbacks inject id + role.
+- `lib/auth/auth.ts` — NextAuth instance + Credentials provider (bcrypt compare vs Prisma User).
+- `lib/validations/auth.ts` — signupSchema (name/email/password letter+number/confirm), loginSchema.
+- `types/next-auth.d.ts` — Session.user.id + role augmentation.
+
+## Admin
+- `components/admin/StatusBadge.tsx` (server) — color-coded status pill (pending/approved/rejected).
+- `components/admin/SubmissionActions.tsx` (client) — Approve button + Reject dialog (reason textarea); calls server actions from lib/db/submissions.ts; router.refresh() on success.
+- `app/admin/layout.tsx` — sidebar nav (Dashboard/Submissions/Contacts + future Businesses/Tools), requires requireAdmin().
+- `lib/auth/requireAdmin.ts` — session → not authed → /login, role !== admin → /dashboard.
+- `scripts/make-admin.ts` — `npm run make-admin -- email` sets role=admin.
+- Uses shadcn dialog (Base UI render prop).
+
 ## Planned

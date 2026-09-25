@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   },
   description:
     "Read the disclaimer governing information, external links, and results shown on ToolNest.",
+  alternates: { canonical: "/disclaimer" },
 };
 
 export default function DisclaimerPage() {

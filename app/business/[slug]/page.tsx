@@ -3,25 +3,30 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExternalLink, Share2 } from "lucide-react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
+import { JsonLd } from "@/components/seo/JsonLd";
 import {
-  getBusinessBySlug,
-  getBusinessRank,
-  mockBusinesses,
-} from "@/lib/mock-data";
+  breadcrumbSchema,
+  localBusinessSchema,
+} from "@/lib/seo/structured-data";
+import { getBusinessBySlug, getBusinesses, getBusinessRank } from "@/lib/db/businesses";
 
-export function generateStaticParams() {
-  return mockBusinesses.map((business) => ({ slug: business.slug }));
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const businesses = await getBusinesses();
+  return businesses.map((business) => ({ slug: business.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/business/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const business = getBusinessBySlug(slug);
+  const business = await getBusinessBySlug(slug);
   if (!business) return { title: { absolute: "Business Not Found — ToolNest" } };
   return {
     title: { absolute: `${business.name} — ToolNest` },
     description: business.description,
+    alternates: { canonical: `/business/${business.slug}` },
   };
 }
 
@@ -29,14 +34,24 @@ export default async function BusinessDetailPage({
   params,
 }: PageProps<"/business/[slug]">) {
   const { slug } = await params;
-  const business = getBusinessBySlug(slug);
+  const business = await getBusinessBySlug(slug);
   if (!business) notFound();
 
-  const rank = getBusinessRank(business);
-  const others = mockBusinesses.filter((b) => b.id !== business.id).slice(0, 4);
+  const rank = await getBusinessRank(business);
+  const allBusinesses = await getBusinesses();
+  const others = allBusinesses
+    .filter((b) => b.id !== business.id)
+    .slice(0, 4);
+
+  const breadcrumbData = breadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "Businesses", url: "/businesses" },
+    { name: business.name, url: `/business/${business.slug}` },
+  ]);
 
   return (
     <>
+      <JsonLd data={[localBusinessSchema(business), breadcrumbData]} />
       <nav className="bg-white py-4">
         <div className="mx-auto max-w-6xl px-4 text-sm text-gray-500">
           <Link href="/" className="transition-colors hover:text-gray-900">

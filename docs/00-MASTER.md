@@ -13,12 +13,13 @@ Phase 1 - Setup & Layout
 - [x] Step 6: Submit form
 - [x] Step 7: Legal pages (Privacy, Terms, Refund, About, Contact, FAQ, Disclaimer)
 - [x] Step 8: Blog + SEO (5 articles + sitemap + robots)
-- [ ] Step 9: Database (Railway)
-- [ ] Step 10: Auth
-- [ ] Step 11: Payments + Leaderboard
-- [ ] Step 12: Blog + SEO
-- [ ] Step 13: Sitemap + robots.txt + SEO
-- [ ] Step 14: AdSense apply
+- [x] Step 9: Database (Railway Postgres + Prisma v6, seeded, DB-backed pages)
+- [x] Step 10: Auth (NextAuth v5 — login/signup/dashboard)
+- [x] Step 11: Admin panel (submissions + contacts management)
+- [x] Step 12: Blog expanded to 15 articles
+- [x] Step 13: SEO polish (JSON-LD, OG images, manifest, canonical)
+- [x] Step 14: AdSense prep + deploy config
+- [ ] Step 15: Deploy to Vercel
 
 ## Site Name
 ToolNest (demo — will change)
@@ -27,7 +28,7 @@ ToolNest (demo — will change)
 Not purchased yet (localhost:3000)
 
 ## Database
-Railway (pending)
+Railway Postgres — live (prisma@6.19.3, seeded 10 businesses + 10 tools)
 
 ## Last Updated
 2025-09-25

@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   },
   description:
     "The Terms of Service governing use of ToolNest, including listings, paid placements, leaderboards, and user content.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {

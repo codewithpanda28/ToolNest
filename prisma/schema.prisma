@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Business {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  logo        String
+  category    String
+  description String
+  website     String
+  amount      Int      @default(0)
+  verified    Boolean  @default(false)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([amount])
+}
+
+model Tool {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  logo        String
+  category    String
+  description String
+  website     String
+  amount      Int      @default(0)
+  pricing     String
+  verified    Boolean  @default(false)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([pricing])
+  @@index([amount])
+}
+
+model Submission {
+  id          String   @id @default(cuid())
+  type        String
+  name        String
+  slug        String
+  category    String
+  description String
+  website     String
+  email       String
+  contactName String
+  plan        String
+  pricing     String?
+  amount      Int?
+  status      String   @default("pending")
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([type])
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model Payment {
+  id                String   @id @default(cuid())
+  userId            String?
+  user              User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  type              String
+  itemId            String
+  amount            Int
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  status            String   @default("pending")
+  createdAt         DateTime @default(now())
+
+  @@index([status])
+  @@index([itemId])
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  submissions Submission[]
+  payments    Payment[]
+}

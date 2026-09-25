@@ -1,10 +1,12 @@
 import type { MetadataRoute } from "next";
-import { mockBusinesses, mockTools } from "@/lib/mock-data";
+import { getBusinesses } from "@/lib/db/businesses";
+import { getTools } from "@/lib/db/tools";
 import { allPosts } from "@/content/blog";
 
-const BASE_URL = "https://toolnest.in";
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://toolnest.in";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = [
     "/",
     "/businesses",
@@ -25,14 +27,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: path === "/" ? 1 : 0.8,
   }));
 
-  const businessRoutes = mockBusinesses.map((b) => ({
+  const [businesses, tools] = await Promise.all([getBusinesses(), getTools()]);
+
+  const businessRoutes = businesses.map((b) => ({
     url: `${BASE_URL}/business/${b.slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.6,
   }));
 
-  const toolRoutes = mockTools.map((t) => ({
+  const toolRoutes = tools.map((t) => ({
     url: `${BASE_URL}/tool/${t.slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,

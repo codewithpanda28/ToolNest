@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Package } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { SITE_NAME } from "@/lib/constants";
+import { UserMenu } from "@/components/auth/UserMenu";
 import { MobileMenu } from "./MobileMenu";
 import { NavLinks } from "./NavLinks";
 
@@ -17,12 +18,7 @@ export function Header() {
         <NavLinks className="hidden items-center gap-8 md:flex" />
 
         <div className="hidden items-center gap-3 md:flex">
-          <Link
-            href="/login"
-            className={buttonVariants({ variant: "ghost" })}
-          >
-            Login
-          </Link>
+          <UserMenu />
           <Link
             href="/submit"
             className={buttonVariants({

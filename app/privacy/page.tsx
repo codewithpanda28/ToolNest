@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   },
   description:
     "Learn how ToolNest collects, uses, and protects your data. Our Privacy Policy covers cookies, AdSense, GDPR, and user rights.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {
