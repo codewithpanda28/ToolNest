@@ -5,7 +5,7 @@ Phase 1 - Setup & Layout
 
 ## Progress
 - [x] Step 1: Project setup + docs
-- [ ] Step 2: Header + Footer
+- [x] Step 2: Header + Footer
 - [ ] Step 3: Homepage
 - [ ] Step 4: Business page
 - [ ] Step 5: Tools page

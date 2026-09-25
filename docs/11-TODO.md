@@ -4,7 +4,7 @@
 
 ## Current: Phase 1 — Setup & Layout
 - [x] Step 1: Project setup + docs
-- [ ] Step 2: Header + Footer
+- [x] Step 2: Header + Footer
 - [ ] Step 3: Homepage (Hero + Leaderboard preview)
 
 ## Phase 2 — Directories (mock data)
