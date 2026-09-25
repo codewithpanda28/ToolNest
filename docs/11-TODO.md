@@ -5,15 +5,27 @@
 ## Current: Phase 1 — Setup & Layout
 - [x] Step 1: Project setup + docs
 - [x] Step 2: Header + Footer
-- [ ] Step 3: Homepage (Hero + Leaderboard preview)
+- [x] Step 3: Homepage (Hero + Leaderboard preview)
+- [x] Step 3.5: UI Polish (React Bits: CursorGrid, ScrollFloat, PixelSwap)
 
 ## Phase 2 — Directories (mock data)
-- [ ] Step 4: /businesses page
-- [ ] Step 5: /tools page
+- [x] Step 4: /businesses page (DriftWall showcase + leaderboard + directory)
+  - [ ] Wire real search on /businesses (DB step)
+  - [ ] Add pagination when >50 businesses
+- [x] Step 5: /tools page + detail pages (DomeGallery showcase + leaderboard + directory)
+  - [ ] Use DomeGallery for tools showcase ✅
+  - [ ] Add tool screenshots (real images) when DB ready
+  - [ ] Add reviews section on detail pages
+
+## Future (React Bits)
+- [ ] ProfileCard for testimonials
+- [ ] ImageTrail for gallery page
 
 ## Phase 3 — Detail + Submit
-- [ ] Step 6: Detail pages
-- [ ] Step 7: Submit form
+- [x] Step 6: Submit form
+  - [ ] Wire real database (Step 8)
+  - [ ] Email notification on submission
+  - [ ] Admin approval flow
 
 ## Phase 4 — Database
 - [ ] Step 8: Database setup (Railway)
@@ -25,11 +37,17 @@
 - [ ] Step 10: Razorpay + Leaderboard logic
 
 ## Phase 7 — Legal
-- [ ] Step 11: Legal pages (Privacy, Terms, Refund)
+- [x] Step 7: Legal pages (Privacy, Terms, Refund, About, Contact, FAQ, Disclaimer) — AdSense ready
+  - [ ] Get real contact email + address before AdSense apply
+  - [ ] Add blog posts (Step 8)
+  - [ ] Add sitemap.xml + robots.txt
 
 ## Phase 8 — Blog + SEO
-- [ ] Step 12: Blog + 15 SEO articles
-- [ ] Step 13: Sitemap + robots.txt + SEO
+- [x] Step 8: Blog system + 5 SEO articles (invoice, automation, listing, SEO tools, GST)
+  - [ ] Write 10 more blog posts (target 15 total for AdSense)
+  - [ ] Get real domain, update sitemap/metadata
+  - [ ] Setup Google Search Console
+- [ ] Step 9: Sitemap + robots.txt + SEO
 
 ## Phase 9 — AdSense
-- [ ] Step 14: AdSense apply
+- [ ] Step 13: AdSense apply
